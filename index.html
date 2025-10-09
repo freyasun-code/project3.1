@@ -136,12 +136,12 @@
   </div>
 </div>
 
-<!-- A.2 -->
 <div class="section" id="A2">
   <h2>A.2: Recovering the Homography</h2>
 
   <h3>computeH(im1_pts, im2_pts) function:</h3>
 
+  <div style="text-align:center;">
   <pre><code>def computeH(src_pts, dst_pts):
     assert src_pts.shape == dst_pts.shape and src_pts.shape[0] >= 4
     num_points = src_pts.shape[0]
@@ -160,13 +160,16 @@
     H = np.append(h, 1).reshape(3, 3)
     return H
   </code></pre>
+  </div>
 
   <h3>Recovered Homography Matrix H:</h3>
 
-  <pre><code>[[ 1.82  -0.05 -888.37]
+  <div style="text-align:center;">
+  <pre><code>[ 1.82  -0.05 -888.37]
  [ 0.36   1.50 -404.83]
- [ 0.00   0.00   1.00]]
+ [ 0.00   0.00   1.00]
   </code></pre>
+  </div>
 
   <h3>System of Equations:</h3>
 
@@ -175,8 +178,8 @@
     \((x, y)\) in the first image to its corresponding point \((u, v)\) in the second image:
   </p>
 
-  <p style="text-align:center;">
-    \[
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
     \lambda 
     \begin{bmatrix}
     u \\ v \\ 1
@@ -185,9 +188,9 @@
     H
     \begin{bmatrix}
     x \\ y \\ 1
-    \end{bmatrix},
-    \]
-  </p>
+    \end{bmatrix}
+    </script>
+  </div>
 
   <p>
     where \(\lambda\) is an arbitrary scale factor, and \(H\) has 8 degrees of freedom 
@@ -199,32 +202,32 @@
     Expanding the equations gives:
   </p>
 
-  <p style="text-align:center;">
-    \[
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
     u = \frac{h_1x + h_2y + h_3}{h_7x + h_8y + 1}, \quad
-    v = \frac{h_4x + h_5y + h_6}{h_7x + h_8y + 1}.
-    \]
-  </p>
+    v = \frac{h_4x + h_5y + h_6}{h_7x + h_8y + 1}
+    </script>
+  </div>
 
   <p>
     Multiplying both sides by the denominator and rearranging terms produces two linear equations per point:
   </p>
 
-  <p style="text-align:center;">
-    \[
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
     \begin{cases}
     h_1x + h_2y + h_3 - u(h_7x + h_8y) = u, \\
-    h_4x + h_5y + h_6 - v(h_7x + h_8y) = v.
+    h_4x + h_5y + h_6 - v(h_7x + h_8y) = v
     \end{cases}
-    \]
-  </p>
+    </script>
+  </div>
 
   <p>
     For each correspondence pair \((x, y) \leftrightarrow (u, v)\), we can write these as two rows in a linear system:
   </p>
 
-  <p style="text-align:center;">
-    \[
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
     \begin{bmatrix}
     x & y & 1 & 0 & 0 & 0 & -ux & -uy \\
     0 & 0 & 0 & x & y & 1 & -vx & -vy
@@ -235,9 +238,9 @@
     =
     \begin{bmatrix}
     u \\ v
-    \end{bmatrix}.
-    \]
-  </p>
+    \end{bmatrix}
+    </script>
+  </div>
 
   <h4>Solving the System</h4>
   <p>
@@ -246,26 +249,26 @@
     overdetermined, and we can find the best-fit solution using <b>least squares</b>:
   </p>
 
-  <p style="text-align:center;">
-    \[
-    h = \operatorname*{argmin}_h \| A h - b \|^2.
-    \]
-  </p>
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
+    h = \operatorname*{argmin}_h \| A h - b \|^2
+    </script>
+  </div>
 
   <p>
     Finally, the 3×3 homography matrix is obtained as:
   </p>
 
-  <p style="text-align:center;">
-    \[
+  <div style="text-align:center;">
+    <script type="math/tex; mode=display">
     H =
     \begin{bmatrix}
     h_1 & h_2 & h_3 \\
     h_4 & h_5 & h_6 \\
     h_7 & h_8 & 1
-    \end{bmatrix}.
-    \]
-  </p>
+    \end{bmatrix}
+    </script>
+  </div>
 
   <p style="font-style:italic; text-align:center;">
     This matrix captures the projective transformation between two images and allows us 
