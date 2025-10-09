@@ -351,16 +351,51 @@ def computeH(src_pts, dst_pts):
 
 
 <!-- A.3 -->
+
 <div class="section" id="A3">
   <h2>A.3: Warp the Images</h2>
+
   <p>
-    Function definitions:
-    <br><code>imwarped_nn = warpImageNearestNeighbor(im, H)</code><br>
-    <code>imwarped_bil = warpImageBilinear(im, H)</code>
+    After computing the homography matrix \( H \), we can use it to warp an image into the reference frame of another. 
+    To do this, we implemented two functions:
   </p>
-  <p>Inverse warping is used to avoid holes in the output image.</p>
+
+  <div style="text-align:center;">
+    <pre style="display:inline-block; text-align:left;">
+imwarped_nn = warpImageNearestNeighbor(im, H)
+imwarped_bil = warpImageBilinear(im, H)
+    </pre>
+  </div>
+
   <p>
-    The Nearest Neighbor Interpolation took <b>1.459 seconds</b>, while the Bilinear Interpolation took <b>2.756 seconds</b>.
+    We use <strong>inverse warping</strong> to avoid holes in the output image. 
+    For each pixel in the output, its position is mapped backward using \( H^{-1} \) 
+    to find the corresponding coordinates in the input image.
+  </p>
+
+  <p>
+    Two interpolation methods were implemented from scratch:
+  </p>
+
+  <ul>
+    <li><strong>Nearest Neighbor Interpolation:</strong> Each output pixel takes the value of the closest input pixel.</li>
+    <li><strong>Bilinear Interpolation:</strong> Each output pixel is computed as a weighted average of its four neighboring input pixels.</li>
+  </ul>
+
+  <h3>Results and Discussion</h3>
+
+  <p>
+    The <em>Nearest Neighbor</em> interpolation ran faster 
+    (<strong>1.46 seconds</strong>), but produced visible jagged edges along diagonal lines and object boundaries.  
+    The <em>Bilinear</em> interpolation took longer (<strong>2.76 seconds</strong>), 
+    yet yielded smoother transitions and overall better visual quality.
+  </p>
+
+  <p>
+    Both methods successfully warped the images using inverse mapping, and we applied them for <strong>rectification</strong>. 
+    For example, by selecting four corners of a rectangular region (such as a poster or a laptop screen) and 
+    defining a perfect rectangle as the target coordinates, 
+    the warped image was corrected so that the originally distorted rectangle appears truly rectangular.
   </p>
 
   <div class="row">
