@@ -177,12 +177,43 @@
   </div>
 </div>
 
+```html
 <!-- A.4 -->
 <div class="section" id="A4">
   <h2>A.4: Blend the Images into a Mosaic</h2>
-  <p style="text-align:center; font-style:italic;">(To be continued...)</p>
+
+  <p>
+    One suggestion is to set it to 1 at the center of each (unwarped) image and make it fall off linearly until it hits 0 at the edges (or use the distance transform <code>bwdist</code>). However, this can produce some strange wedge-like artifacts. You can try minimizing these by using a more sophisticated blending technique, such as a Laplacian pyramid. If your only problem is “ghosting” of high-frequency terms, then a 2-level pyramid should be enough.
+  </p>
+
+  <p>
+    Since only 8 pairs of correspondence points were selected, and I could not perfectly keep the phone centered while shooting, the resulting mosaics are slightly misaligned and show some ghosting artifacts.
+  </p>
+
+  <div class="row">
+    <div class="img-block">
+      <img src="tower-mosaic_weighted.jpg" alt="tower weighted mosaic" width="400">
+      <p>Weighted Averaging Mosaic (Tower)</p>
+    </div>
+    <div class="img-block">
+      <img src="tower-mosaic_pyramid.jpg" alt="tower pyramid mosaic" width="400">
+      <p>Laplacian Pyramid Mosaic (Tower)</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="img-block">
+      <img src="library-mosaic_weighted.jpg" alt="library weighted mosaic" width="400">
+      <p>Weighted Averaging Mosaic (Library)</p>
+    </div>
+    <div class="img-block">
+      <img src="library-mosaic_pyramid.jpg" alt="library pyramid mosaic" width="400">
+      <p>Laplacian Pyramid Mosaic (Library)</p>
+    </div>
+  </div>
 </div>
 ```
+
 
   </div>
 </body>
