@@ -430,15 +430,35 @@ imwarped_bil = warpImageBilinear(im, H)
 </div>
 
 <!-- A.4 -->
+
 <div class="section" id="A4">
   <h2>A.4: Blend the Images into a Mosaic</h2>
 
   <p>
-    One suggestion is to set it to 1 at the center of each (unwarped) image and make it fall off linearly until it hits 0 at the edges (or use the distance transform <code>bwdist</code>). However, this can produce some strange wedge-like artifacts. You can try minimizing these by using a more sophisticated blending technique, such as a Laplacian pyramid. If your only problem is “ghosting” of high-frequency terms, then a 2-level pyramid should be enough.
+    In this part, I combined multiple images into a single seamless mosaic using the computed homographies.  
+    The left and right images were both warped into the coordinate system of the middle image, 
+    so that all three images align in a common reference frame.
   </p>
 
   <p>
-    Since only 8 pairs of correspondence points were selected, and I could not perfectly keep the phone centered while shooting, the resulting mosaics are slightly misaligned and show some ghosting artifacts.
+    After warping, I implemented two blending approaches to reduce visible seams:
+  </p>
+
+  <ul>
+    <li><strong>Weighted Averaging (Alpha Feathering):</strong> 
+      The alpha value is set to 1 at the center of each image and gradually falls to 0 near the edges, 
+      based on the distance transform. This smooth transition helps avoid harsh boundaries between images.
+    </li>
+    <li><strong>Laplacian Pyramid Blending:</strong> 
+      A multi-level blending method that combines images in both low and high frequency bands, 
+      preserving edge details while minimizing ghosting artifacts. This produced smoother transitions and better color consistency.
+    </li>
+  </ul>
+
+  <p>
+    Since only eight pairs of correspondence points were selected and it was difficult to keep the phone perfectly centered during shooting, 
+    some parts of the final mosaics are slightly misaligned and show mild ghosting.  
+    Nonetheless, the overall alignment demonstrates that the homographies and blending pipeline worked as expected.
   </p>
 
   <div class="row">
