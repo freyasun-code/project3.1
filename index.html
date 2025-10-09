@@ -135,13 +135,81 @@
   </div>
 </div>
 
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A.2: Recovering the Homography</title>
+
+  <!-- MathJax configuration -->
+
+  <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(','\\)']],
+      displayMath: [['\\[','\\]']]
+    },
+    options: {
+      skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+    }
+  };
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Basic layout styles -->
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+      background-color: #fafafa;
+      color: #333;
+    }
+    h2, h3, h4 {
+      color: #003366;
+    }
+    .section {
+      margin-bottom: 60px;
+    }
+    .row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 25px;
+    }
+    .img-block {
+      text-align: center;
+    }
+    img {
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    pre {
+      background: #f4f4f4;
+      border-radius: 6px;
+      padding: 14px;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+
 <div class="section" id="A2">
   <h2>A.2: Recovering the Homography</h2>
 
   <h3>computeH(im1_pts, im2_pts) function:</h3>
 
   <div style="text-align:center;">
-  <pre><code>def computeH(src_pts, dst_pts):
+    <pre style="display:inline-block; text-align:left;">
+def computeH(src_pts, dst_pts):
     assert src_pts.shape == dst_pts.shape and src_pts.shape[0] >= 4
     num_points = src_pts.shape[0]
     A = []
@@ -158,28 +226,29 @@
     h, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
     H = np.append(h, 1).reshape(3, 3)
     return H
-  </code></pre>
+    </pre>
   </div>
 
   <h3>Recovered Homography Matrix H:</h3>
 
   <div style="text-align:center;">
-  <pre><code>[ 1.82  -0.05 -888.37]
- [ 0.36   1.50 -404.83]
- [ 0.00   0.00   1.00]
-  </code></pre>
+    <pre style="display:inline-block; text-align:center;">
+      [  1.82  -0.05 -888.37 ]
+      [  0.36   1.50 -404.83 ]
+      [  0.00   0.00    1.00 ]
+    </pre>
   </div>
 
   <h3>System of Equations:</h3>
 
   <p>
-    To align one image to another, we want to find a <b>homography matrix</b> \( H \) that maps a point 
+    To align one image to another, we need to find a <strong>homography matrix</strong> \( H \) that maps a point 
     \((x, y)\) in the first image to its corresponding point \((u, v)\) in the second image:
   </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
-    \lambda 
+    \[
+    \lambda
     \begin{bmatrix}
     u \\ v \\ 1
     \end{bmatrix}
@@ -188,48 +257,42 @@
     \begin{bmatrix}
     x \\ y \\ 1
     \end{bmatrix}
-    </script>
+    \]
   </div>
 
-  <p>
-    where \(\lambda\) is an arbitrary scale factor, and \(H\) has 8 degrees of freedom 
-    (the ninth element is fixed to 1).
-  </p>
+  <p>where \(\lambda\) is an arbitrary scale factor and \(H\) has 8 degrees of freedom (we set the 9th element to 1).</p>
 
   <h4>Setting up the Linear System</h4>
-  <p>
-    Expanding the equations gives:
-  </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
-    u = \frac{h_1x + h_2y + h_3}{h_7x + h_8y + 1}, \quad
-    v = \frac{h_4x + h_5y + h_6}{h_7x + h_8y + 1}
-    </script>
+    \[
+    u = \frac{h_1 x + h_2 y + h_3}{h_7 x + h_8 y + 1}, \qquad
+    v = \frac{h_4 x + h_5 y + h_6}{h_7 x + h_8 y + 1}
+    \]
   </div>
 
   <p>
-    Multiplying both sides by the denominator and rearranging terms produces two linear equations per point:
+    Multiplying through by the denominator and rearranging gives two linear equations per correspondence:
   </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
+    \[
     \begin{cases}
-    h_1x + h_2y + h_3 - u(h_7x + h_8y) = u, \\
-    h_4x + h_5y + h_6 - v(h_7x + h_8y) = v
+    h_1 x + h_2 y + h_3 - u(h_7 x + h_8 y) = u, \\
+    h_4 x + h_5 y + h_6 - v(h_7 x + h_8 y) = v.
     \end{cases}
-    </script>
+    \]
   </div>
 
   <p>
-    For each correspondence pair \((x, y) \leftrightarrow (u, v)\), we can write these as two rows in a linear system:
+    Written in matrix form (two rows per correspondence):
   </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
+    \[
     \begin{bmatrix}
-    x & y & 1 & 0 & 0 & 0 & -ux & -uy \\
-    0 & 0 & 0 & x & y & 1 & -vx & -vy
+    x & y & 1 & 0 & 0 & 0 & -u x & -u y \\
+    0 & 0 & 0 & x & y & 1 & -v x & -v y
     \end{bmatrix}
     \begin{bmatrix}
     h_1 \\ h_2 \\ h_3 \\ h_4 \\ h_5 \\ h_6 \\ h_7 \\ h_8
@@ -238,55 +301,53 @@
     \begin{bmatrix}
     u \\ v
     \end{bmatrix}
-    </script>
+    \]
   </div>
 
-  <h4>Solving the System</h4>
+  <h4>Solving</h4>
+
   <p>
-    Each point pair provides two equations, so we need at least <b>four correspondences</b> (eight equations) 
-    to solve for the eight unknowns in \(h\). When more than four points are available, the system becomes 
-    overdetermined, and we can find the best-fit solution using <b>least squares</b>:
+    With \(N\) correspondences we have \(2N\) equations, which we can solve via least squares:
   </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
-    h = \operatorname*{argmin}_h \| A h - b \|^2
-    </script>
+    \[
+    h = \operatorname*{argmin}_h \|A h - b\|^2
+    \]
   </div>
 
-  <p>
-    Finally, the 3×3 homography matrix is obtained as:
+  <p style="text-align:center; font-style:italic;">
+    The final 3×3 homography matrix is formed by appending 1 to complete \( H \):
   </p>
 
   <div style="text-align:center;">
-    <script type="math/tex; mode=display">
+    \[
     H =
     \begin{bmatrix}
     h_1 & h_2 & h_3 \\
     h_4 & h_5 & h_6 \\
     h_7 & h_8 & 1
     \end{bmatrix}
-    </script>
+    \]
   </div>
-
-  <p style="font-style:italic; text-align:center;">
-    This matrix captures the projective transformation between two images and allows us 
-    to warp one image onto another for rectification or mosaicing.
-  </p>
 
   <h3>Correspondences Visualized on the Images:</h3>
 
   <div class="row">
     <div class="img-block">
-      <img src="im1_points.jpg" alt="image 1 with correspondences" width="400">
+      <img src="im1_points.jpg" alt="image 1 correspondences" width="420">
       <p>Image 1 (Left)</p>
     </div>
     <div class="img-block">
-      <img src="im2_points.jpg" alt="image 2 with correspondences" width="400">
+      <img src="im2_points.jpg" alt="image 2 correspondences" width="420">
       <p>Image 2 (Right)</p>
     </div>
   </div>
+
 </div>
+
+</body>
+</html>
 
 
 <!-- A.3 -->
