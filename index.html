@@ -538,11 +538,27 @@ imwarped_bil = warpImageBilinear(im, H)
   <div class="row">
     <div class="img-block" style="text-align: center; width: 100%;">
       <img src="harris_features_full.jpg" alt="Harris feature descriptors visualization" width="800">
-      <p><b>Figure B.2:</b> Visualization of the six extracted 8×8 feature descriptors sampled from 40×40 windows around the strongest Harris corners.</p>
+      <p>Six extracted 8×8 feature descriptors of the strongest Harris corners.</p>
     </div>
   </div>
 </div>
-    
+
+<!-- B.3 -->
+<div class="section" id="B3">
+  <h2>B.3: Feature Matching</h2>
+  <p>
+    In this part, I implemented feature matching between the two images using the extracted 8×8 descriptors.
+    Matches are determined with the Lowe ratio test and mutual consistency check, ensuring reliable correspondences.
+    The strongest matches are visualized with red lines connecting the corresponding keypoints across the images.
+  </p>
+
+  <div class="row">
+    <div class="img-block" style="text-align: center; width: 100%;">
+      <img src="matches_red_color.jpg" alt="Feature matching visualization" width="800">
+      <p>Feature matching between two images</p>
+    </div>
+  </div>
+</div>
     
   </div>
 </body>
