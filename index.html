@@ -38,7 +38,7 @@
       margin-top: 20px;
     }
     .section {
-      background-color: #CBBBD3; /* 固定浅紫灰色，不透明 */
+      background-color: #D8CFE3; /* 固定浅紫灰色，不透明 */
       padding: 30px;
       margin: 40px 0;
       border-radius: 12px;
@@ -510,16 +510,40 @@ imwarped_bil = warpImageBilinear(im, H)
 
       <div class="row">
         <div class="img-block">
-          <img src="harris_before_anms.jpg" alt="Harris corners before ANMS" width="420">
+          <img src="harris_points.jpg" alt="Harris corners before ANMS" width="420">
           <p>Harris Corners (Before ANMS)</p>
         </div>
         <div class="img-block">
-          <img src="harris_after_anms.jpg" alt="Harris corners after ANMS" width="420">
+          <img src="anms_points.jpg" alt="Harris corners after ANMS" width="420">
           <p>Harris Corners (After ANMS)</p>
         </div>
       </div>
     </div>
 
+<!-- B.2 -->
+<div class="section" id="B2">
+  <h2>B.2: Feature Descriptor Extraction</h2>
+  <p>
+    In this part, I implemented the feature descriptor extraction as described in Section 4 of the paper.
+    Each detected Harris corner is represented by an <b>8×8 patch</b> sampled from a <b>blurred 40×40 window</b> 
+    around the feature point. This ensures smoother gradients and robustness to small spatial variations,
+    even without applying rotation invariance.
+  </p>
+
+  <p>
+    The resulting descriptors are normalized to reduce illumination differences. 
+    The figure below visualizes the top six Harris features and their corresponding 8×8 patches.
+  </p>
+
+  <div class="row">
+    <div class="img-block" style="text-align: center; width: 100%;">
+      <img src="harris_features_full.jpg" alt="Harris feature descriptors visualization" width="800">
+      <p><b>Figure B.2:</b> Visualization of the six extracted 8×8 feature descriptors sampled from 40×40 windows around the strongest Harris corners.</p>
+    </div>
+  </div>
+</div>
+    
+    
   </div>
 </body>
 </html>
