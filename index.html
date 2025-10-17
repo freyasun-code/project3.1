@@ -38,7 +38,7 @@
       margin-top: 20px;
     }
     .section {
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.18);
       padding: 30px;
       margin: 40px 0;
       border-radius: 12px;
@@ -82,6 +82,10 @@
     <a href="#A2">A.2</a>
     <a href="#A3">A.3</a>
     <a href="#A4">A.4</a>
+    <a href="#B1">B.1</a>
+    <a href="#B2">B.2</a>
+    <a href="#B3">B.3</a>
+    <a href="#B4">B.4</a>
   </nav>
 
   <div class="container">
@@ -495,6 +499,26 @@ imwarped_bil = warpImageBilinear(im, H)
   </div>
 </div>
 
+<!-- B.1 -->
+    <div class="section" id="B1">
+      <h2>B.1: Harris Corner Detection</h2>
+      <p>
+        In this part, I implemented the Harris corner detector to automatically find 
+        distinctive points in the image that are suitable for matching and homography estimation.  
+        The response function highlights regions with strong intensity variation in both directions.
+      </p>
+
+      <div class="row">
+        <div class="img-block">
+          <img src="harris_before_anms.jpg" alt="Harris corners before ANMS" width="420">
+          <p>Harris Corners (Before ANMS)</p>
+        </div>
+        <div class="img-block">
+          <img src="harris_after_anms.jpg" alt="Harris corners after ANMS" width="420">
+          <p>Harris Corners (After ANMS)</p>
+        </div>
+      </div>
+    </div>
 
   </div>
 </body>
