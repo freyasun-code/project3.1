@@ -20,7 +20,7 @@
       z-index: 1000;
     }
     nav a {
-      color: #ffddff;
+      color: #cc88cc;
       text-decoration: none;
       margin: 0 15px;
       font-weight: bold;
@@ -44,7 +44,7 @@
       border-radius: 12px;
     }
     .section h2 {
-      color: #ffddff;
+      color: #cc88cc;
       text-align: center;
     }
     img {
@@ -559,6 +559,62 @@ imwarped_bil = warpImageBilinear(im, H)
     </div>
   </div>
 </div>
+
+<!-- B.4 -->
+<div class="section" id="B4">
+  <h2>B.4: RANSAC for Robust Homography</h2>
+  <p>
+    I used RANSAC to estimate a robust homography between image pairs by repeatedly sampling minimal sets of correspondences,
+    computing candidate homographies, and selecting the one with the most inliers under a reprojection-error threshold.
+    This makes the final alignment resilient to mismatches and outliers before blending the warped images into a mosaic.
+  </p>
+
+  <!-- Row 1: tower (manual / automatic) -->
+  <div class="row">
+    <div class="img-block">
+      <img src="tower-mosaic_pyramid.jpg" alt="Tower mosaic (manually)">
+      <p class="img-title">Tower — manually</p>
+      <span class="label">tower-mosaic_pyramid.jpg</span>
+    </div>
+
+    <div class="img-block">
+      <img src="mosaic_auto.jpg" alt="Tower mosaic (automatically)">
+      <p class="img-title">Tower — automatically</p>
+      <span class="label">mosaic_auto.jpg</span>
+    </div>
+  </div>
+
+  <!-- Row 2: library (manual / automatic) -->
+  <div class="row">
+    <div class="img-block">
+      <img src="library-mosaic_pyramid.jpg" alt="Library mosaic (manually)">
+      <p class="img-title">Library — manually</p>
+      <span class="label">library-mosaic_pyramid.jpg</span>
+    </div>
+
+    <div class="img-block">
+      <img src="library_3img.jpg" alt="Library mosaic (automatically)">
+      <p class="img-title">Library — automatically</p>
+      <span class="label">library_3img.jpg</span>
+    </div>
+  </div>
+
+  <!-- Row 3: street (manual / automatic) -->
+  <div class="row">
+    <div class="img-block">
+      <img src="street-mosaic_pyramid.jpg" alt="Street mosaic (manually)">
+      <p class="img-title">Street — manually</p>
+      <span class="label">street-mosaic_pyramid.jpg</span>
+    </div>
+
+    <div class="img-block">
+      <img src="street_3img.jpg" alt="Street mosaic (automatically)">
+      <p class="img-title">Street — automatically</p>
+      <span class="label">street_3img.jpg</span>
+    </div>
+  </div>
+</div>
+
     
   </div>
 </body>
