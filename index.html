@@ -651,15 +651,21 @@ are distributed more evenly across the image.
 <!-- B.4 -->
 <div class="section" id="B4">
   <h2>B.4: RANSAC for Robust Homography</h2>
-  <p>
-    In this part, I implemented the <b>RANSAC algorithm</b> to robustly estimate the homography matrix between image pairs.
-    Instead of relying on manually selected correspondences, RANSAC automatically filters out mismatched points 
-    from the feature matches obtained in <b>B.3</b>. It repeatedly samples minimal sets of correspondences, 
-    computes candidate homographies, and retains the one with the largest inlier set based on a reprojection threshold.
-  </p>
 
-  <p>
-    This greatly improves the alignment accuracy and robustness of the mosaics, especially when noisy matches are present.  
+<p>
+The RANSAC algorithm is used to estimate a robust homography matrix between two images. 
+  It works by repeatedly selecting a small random subset of feature matches, computing a candidate homography, and then testing how many matches agree with that transformation (the inliers). 
+  After many iterations, the model with the largest number of inliers is chosen as the best estimate, and a final homography is recalculated using all inlier points.
+</p>
+
+<p>
+This process effectively removes outliers from the feature matching results, ensuring that only consistent correspondences are used.
+  As a result, the final alignment between the two images becomes more accurate and stable.
+</p>
+
+<p>
+Using RANSAC makes the image mosaic process more automated and reliable — we don’t have to manually pick corresponding points. 
+  Combined with <b>Harris corner detection</b> for feature extraction, the matches are both accurate and efficient, leading to a clean and well-aligned mosaic.
     The results below compare mosaics created from <em>manual correspondences</em> (left) and 
     <em>automatically detected features with RANSAC</em> (right).
   </p>
