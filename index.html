@@ -530,7 +530,7 @@ Here, <i>h<sub>i</sub></i> is the Harris response of corner <i>i</i>, and
 <i>c<sub>robust</sub></i> is a robustness factor (set to 0.9 in our implementation). 
 Each corner’s radius is inversely related to the density of stronger corners nearby. 
 After computing all <i>r<sub>i</sub></i>, the algorithm keeps the 
-<code>num_to_keep</code> (e.g., 500) corners with the largest radii, 
+<code>num_to_keep</code> corners with the largest radii, 
 which represent the most spatially distinctive and well-distributed features.<br><br>
 
 The following figures visualize the ANMS results (500 keypoints per image). 
@@ -553,15 +553,47 @@ are distributed more evenly across the image.
 <!-- B.2 -->
 <div class="section" id="B2">
   <h2>B.2: Feature Descriptor Extraction</h2>
+
   <p>
-    In this part, I implemented the feature descriptor extraction as described in Section 4 of the paper.
-    Each detected Harris corner is represented by an <b>8×8 patch</b> sampled from a <b>blurred 40×40 window</b> 
-    around the feature point. This ensures smoother gradients and robustness to small spatial variations,
-    even without applying rotation invariance.
+    Each descriptor is formed from a
+    <strong>blurred 40×40 window</strong> centered at the corner and then subsampled to an <strong>8×8</strong>
+    patch. The patch is bias/gain normalized to reduce the effect of illumination differences.
+  </p>
+
+  <p><strong>Implementation details:</strong></p>
+
+  <ol>
+    <li>
+      <strong>Gaussian smoothing</strong>: the input image is first blurred with a Gaussian kernel
+      (σ = 1.0) to reduce noise and to produce a stable, smooth sampling field:
+    </li>
+
+    <li>
+      <strong>Patch extraction</strong>: for a corner at <code>(x<sub>i</sub>, y<sub>i</sub>)</code>, extract a
+      <code>40 × 40</code> grayscale window centered at that coordinate. 
+    </li>
+
+    <li>
+      <strong>Subsampling</strong>: downsample the 40×40 window to an 8×8 patch. 
+      This gives a compact descriptor that still captures coarse local structure while ignoring fine texture noise.
+    </li>
+
+    <li>
+      <strong>Bias/gain normalization</strong>: normalize the 8×8 patch to remove linear illumination effects:
+      <div style="text-align:center;">
+        <code>I' = (I − μ) / (σ + ε)</code>
+      </div>
+      where <code>μ</code> and <code>σ</code> are the patch mean and standard deviation, and <code>ε</code> is a small constant
+      to avoid division by zero.
+    </li>
+  </ol>
+
+  <p>
+    These normalized descriptors are
+    robust to linear changes in brightness/contrast and are suitable for nearest-neighbor matching. 
   </p>
 
   <p>
-    The resulting descriptors are normalized to reduce illumination differences. 
     The figure below visualizes the top six Harris features and their corresponding 8×8 patches.
   </p>
 
