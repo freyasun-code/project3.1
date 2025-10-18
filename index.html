@@ -608,10 +608,36 @@ are distributed more evenly across the image.
 <!-- B.3 -->
 <div class="section" id="B3">
   <h2>B.3: Feature Matching</h2>
+
   <p>
-    In this part, I implemented feature matching between the two images using the extracted 8×8 descriptors.
-    Matches are determined with the Lowe ratio test and mutual consistency check, ensuring reliable correspondences.
-    The strongest matches are visualized with red lines connecting the corresponding keypoints across the images.
+    The matching process is based on the
+    <strong>Lowe’s ratio test</strong>, which helps identify distinctive and reliable correspondences.
+  </p>
+<br><br>
+      <strong>Distance computation:</strong>
+      For each descriptor <code>d<sub>i</sub></code> in the first image, compute its
+      Euclidean (L2) distance to all descriptors in the second image:
+      <div style="text-align:center;">
+        <code>d<sub>ij</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup></code>
+      </div>
+<br><br>
+      <strong>Nearest neighbor search:</strong>
+      For each descriptor, find its two nearest neighbors <code>d<sub>j</sub></code> and
+      <code>d<sub>k</sub></code> in the second image (the smallest and second-smallest distances).
+   <br><br>
+      <strong>Lowe’s ratio test:</strong>
+      To reduce ambiguous matches, compute the ratio:
+      <div style="text-align:center;">
+        <code>ratio<sub>i</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup> / || d<sub>i</sub> − d<sub>k</sub> ||<sup>2</sup></code>
+      </div>
+      A match is accepted only if <code>ratio<sub>i</sub> &lt; T</code>, meaning the best match is
+      significantly better than the next candidate.  
+      In this implementation, the threshold <code>T = 0.3</code> is used to ensure high-quality correspondences.
+
+  <p>
+    This approach ensures that the retained matches are both distinctive and robust, providing reliable
+    correspondences between interest points across different images. The results of the feature matching
+    are visualized below:
   </p>
 
   <div class="row">
