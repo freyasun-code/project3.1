@@ -38,7 +38,7 @@
       margin-top: 20px;
     }
     .section {
-      background-color: #D6E4F0; /* 固定浅紫灰色，不透明 */
+      background-color: #D7D3EB; /* 固定浅紫灰色，不透明 */
       padding: 30px;
       margin: 40px 0;
       border-radius: 12px;
@@ -503,10 +503,59 @@ imwarped_bil = warpImageBilinear(im, H)
     <div class="section" id="B1">
       <h2>B.1: Harris Corner Detection</h2>
       <p>
-        In this part, I implemented the Harris corner detector to automatically find 
-        distinctive points in the image that are suitable for matching and homography estimation.  
-        The response function highlights regions with strong intensity variation in both directions.
-      </p>
+To detect feature points in an image, I first applied the <b>Harris Corner Detector</b>, 
+which identifies pixels exhibiting strong intensity variations in both the x and y directions. <br><br>
+
+The Harris response function is defined as:
+</p>
+
+<p style="text-align:center;">
+  <i>R = det(M) − k · (trace(M))<sup>2</sup></i>
+</p>
+
+<p>
+where <i>M</i> is the second moment matrix at each pixel:
+</p>
+
+<p style="text-align:center;">
+  <i>
+  M = [ [I<sub>x</sub><sup>2</sup>, I<sub>x</sub>I<sub>y</sub>], [I<sub>x</sub>I<sub>y</sub>, I<sub>y</sub><sup>2</sup>] ]
+  </i>
+</p>
+
+<p>
+Here, I<sub>x</sub> and I<sub>y</sub> denote the image gradients along the x and y axes. 
+Pixels with large Harris response values (R) are considered strong corner candidates. 
+To avoid unstable detections at the borders, points near the image edges are discarded. <br><br>
+
+While Harris corners effectively capture strong interest points, they often appear 
+densely clustered in textured regions. To obtain a more balanced spatial distribution, 
+I applied <b>Adaptive Non-Maximal Suppression (ANMS)</b>. 
+This technique selects a subset of keypoints that are both strong and spatially well-separated. <br><br>
+
+For each detected corner <i>i</i>, a suppression radius <i>r<sub>i</sub></i> is computed as the minimum distance 
+to any other corner <i>j</i> that has a significantly higher Harris response:
+</p>
+
+<p style="text-align:center;">
+  <i>
+  r<sub>i</sub> = min<sub>j</sub> ||x<sub>i</sub> − x<sub>j</sub>|| , &nbsp;&nbsp;
+  s.t. &nbsp; h<sub>j</sub> > c<sub>robust</sub> · h<sub>i</sub>
+  </i>
+</p>
+
+<p>
+Here, <i>h<sub>i</sub></i> is the Harris response of corner <i>i</i>, and 
+<i>c<sub>robust</sub></i> is a robustness factor (set to 0.9 in our implementation). 
+Each corner’s radius is inversely related to the density of stronger corners nearby. 
+After computing all <i>r<sub>i</sub></i>, the algorithm keeps the 
+<code>num_to_keep</code> (e.g., 500) corners with the largest radii, 
+which represent the most spatially distinctive and well-distributed features.<br><br>
+
+The following figures visualize the ANMS results (500 keypoints per image). 
+Compared to the raw Harris corners shown previously, these keypoints 
+are distributed more evenly across the image.
+</p>
 
       <div class="row">
         <div class="img-block">
