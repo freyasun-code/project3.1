@@ -555,53 +555,31 @@ are distributed more evenly across the image.
   <h2>B.2: Feature Descriptor Extraction</h2>
 
   <p>
-    Each descriptor is formed from a
-    <strong>blurred 40×40 window</strong> centered at the corner and then subsampled to an <strong>8×8</strong>
+    Each descriptor is formed from a <strong>blurred 40×40 window</strong> centered at the detected corner and then subsampled to an <strong>8×8</strong>
     patch. The patch is bias/gain normalized to reduce the effect of illumination differences.
   </p>
 
   <p><strong>Implementation details:</strong></p>
 
-  <ol>
-    <li>
-      <strong>Gaussian smoothing</strong>: the input image is first blurred with a Gaussian kernel
-      (σ = 1.0) to reduce noise and to produce a stable, smooth sampling field:
-    </li>
+  <p><strong>Gaussian smoothing:</strong> The input image is first blurred with a Gaussian kernel (σ = 1.0) to reduce noise and produce a stable, smooth sampling field.</p>
 
-    <li>
-      <strong>Patch extraction</strong>: for a corner at <code>(x<sub>i</sub>, y<sub>i</sub>)</code>, extract a
-      <code>40 × 40</code> grayscale window centered at that coordinate. 
-    </li>
+  <p><strong>Patch extraction:</strong> For a corner at <em>(x<sub>i</sub>, y<sub>i</sub>)</em>, extract a <em>40 × 40</em> grayscale window centered at that coordinate.</p>
 
-    <li>
-      <strong>Subsampling</strong>: downsample the 40×40 window to an 8×8 patch. 
-      This gives a compact descriptor that still captures coarse local structure while ignoring fine texture noise.
-    </li>
+  <p><strong>Subsampling:</strong> Downsample the 40×40 window to an 8×8 patch. This creates a compact descriptor that captures coarse local structure while ignoring fine texture noise.</p>
 
-    <li>
-      <strong>Bias/gain normalization</strong>: normalize the 8×8 patch to remove linear illumination effects:
-      <div style="text-align:center;">
-        <code>I' = (I − μ) / (σ + ε)</code>
-      </div>
-      where <code>μ</code> and <code>σ</code> are the patch mean and standard deviation, and <code>ε</code> is a small constant
-      to avoid division by zero.
-    </li>
-  </ol>
+  <p><strong>Bias/gain normalization:</strong> Normalize the 8×8 patch to remove illumination effects:</p>
+
+  <div class="formula">I′ = (I − μ) / (σ + ε)</div>
 
   <p>
-    These normalized descriptors are
-    robust to linear changes in brightness/contrast and are suitable for nearest-neighbor matching. 
+    where μ and σ are the patch mean and standard deviation, and ε is a small constant to avoid division by zero. These normalized descriptors are robust to linear changes in brightness and contrast.
   </p>
 
-  <p>
-    The figure below visualizes the top six Harris features and their corresponding 8×8 patches.
-  </p>
+  <p>The figure below visualizes the top six Harris features and their corresponding 8×8 patches:</p>
 
-  <div class="row">
-    <div class="img-block" style="text-align: center; width: 100%;">
-      <img src="harris_features_full.jpg" alt="Harris feature descriptors visualization" width="800">
-      <p>Six extracted 8×8 feature descriptors of the strongest Harris corners.</p>
-    </div>
+  <div class="img-block" style="text-align: center;">
+    <img src="harris_features_full.jpg" alt="Harris feature descriptors visualization" width="800">
+    <p>Six extracted 8×8 feature descriptors of the strongest Harris corners.</p>
   </div>
 </div>
 
@@ -610,43 +588,34 @@ are distributed more evenly across the image.
   <h2>B.3: Feature Matching</h2>
 
   <p>
-    The matching process is based on the
-    <strong>Lowe’s ratio test</strong>, which helps identify distinctive and reliable correspondences.
+    The feature matching process is based on the <strong>Lowe’s ratio test</strong>, which helps identify distinctive and reliable correspondences between two images.
   </p>
-<br><br>
-      <strong>Distance computation:</strong>
-      For each descriptor <code>d<sub>i</sub></code> in the first image, compute its
-      Euclidean (L2) distance to all descriptors in the second image:
-      <div style="text-align:center;">
-        <code>d<sub>ij</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup></code>
-      </div>
-<br><br>
-      <strong>Nearest neighbor search:</strong>
-      For each descriptor, find its two nearest neighbors <code>d<sub>j</sub></code> and
-      <code>d<sub>k</sub></code> in the second image (the smallest and second-smallest distances).
-   <br><br>
-      <strong>Lowe’s ratio test:</strong>
-      To reduce ambiguous matches, compute the ratio:
-      <div style="text-align:center;">
-        <code>ratio<sub>i</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup> / || d<sub>i</sub> − d<sub>k</sub> ||<sup>2</sup></code>
-      </div>
-      A match is accepted only if <code>ratio<sub>i</sub> &lt; T</code>, meaning the best match is
-      significantly better than the next candidate.  
-      In this implementation, the threshold <code>T = 0.3</code> is used to ensure high-quality correspondences.
+
+  <p><strong>Distance computation:</strong> For each descriptor d<sub>i</sub> in the first image, compute its Euclidean (L2) distance to all descriptors in the second image:</p>
+
+  <div class="formula">d<sub>ij</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup></div>
+
+  <p><strong>Nearest neighbor search:</strong> For each descriptor, find its two nearest neighbors d<sub>j</sub> and d<sub>k</sub> in the second image (the smallest and second-smallest distances).</p>
+
+  <p><strong>Lowe’s ratio test:</strong> To reduce ambiguous matches, compute the ratio:</p>
+
+  <div class="formula">ratio<sub>i</sub> = || d<sub>i</sub> − d<sub>j</sub> ||<sup>2</sup> / || d<sub>i</sub> − d<sub>k</sub> ||<sup>2</sup></div>
 
   <p>
-    This approach ensures that the retained matches are both distinctive and robust, providing reliable
-    correspondences between interest points across different images. The results of the feature matching
-    are visualized below:
+    A match is accepted only if ratio<sub>i</sub> &lt; T, meaning the best match is significantly better than the next candidate.
+    In this implementation, <strong>T = 0.3</strong> is used to ensure high-quality correspondences.
   </p>
 
-  <div class="row">
-    <div class="img-block" style="text-align: center; width: 100%;">
-      <img src="matches_red_color.jpg" alt="Feature matching visualization" width="800">
-      <p>Feature matching between two images</p>
-    </div>
+  <p>
+    This method ensures that the retained matches are both distinctive and robust, providing reliable correspondences between interest points across different images.
+  </p>
+
+  <div class="img-block" style="text-align: center;">
+    <img src="matches_red_color.jpg" alt="Feature matching visualization" width="800">
+    <p>Feature matching between two images.</p>
   </div>
 </div>
+
 
 <!-- B.4 -->
 <div class="section" id="B4">
