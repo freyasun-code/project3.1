@@ -506,25 +506,6 @@ imwarped_bil = warpImageBilinear(im, H)
 To detect feature points in an image, I first applied the <b>Harris Corner Detector</b>, 
 which identifies pixels exhibiting strong intensity variations in both the x and y directions. <br><br>
 
-The Harris response function is defined as:
-</p>
-
-<p style="text-align:center;">
-  <i>R = det(M) − k · (trace(M))<sup>2</sup></i>
-</p>
-
-<p>
-where <i>M</i> is the second moment matrix at each pixel:
-</p>
-
-<p style="text-align:center;">
-  <i>
-  M = [ [I<sub>x</sub><sup>2</sup>, I<sub>x</sub>I<sub>y</sub>], [I<sub>x</sub>I<sub>y</sub>, I<sub>y</sub><sup>2</sup>] ]
-  </i>
-</p>
-
-<p>
-Here, I<sub>x</sub> and I<sub>y</sub> denote the image gradients along the x and y axes. 
 Pixels with large Harris response values (R) are considered strong corner candidates. 
 To avoid unstable detections at the borders, points near the image edges are discarded. <br><br>
 
