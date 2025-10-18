@@ -564,56 +564,55 @@ imwarped_bil = warpImageBilinear(im, H)
 <div class="section" id="B4">
   <h2>B.4: RANSAC for Robust Homography</h2>
   <p>
-    I used RANSAC to estimate a robust homography between image pairs by repeatedly sampling minimal sets of correspondences,
-    computing candidate homographies, and selecting the one with the most inliers under a reprojection-error threshold.
-    This makes the final alignment resilient to mismatches and outliers before blending the warped images into a mosaic.
+    In this part, I implemented the <b>RANSAC algorithm</b> to robustly estimate the homography matrix between image pairs.
+    Instead of relying on manually selected correspondences, RANSAC automatically filters out mismatched points 
+    from the feature matches obtained in <b>B.3</b>. It repeatedly samples minimal sets of correspondences, 
+    computes candidate homographies, and retains the one with the largest inlier set based on a reprojection threshold.
   </p>
 
-  <!-- Row 1: tower (manual / automatic) -->
+  <p>
+    This greatly improves the alignment accuracy and robustness of the mosaics, especially when noisy matches are present.  
+    The results below compare mosaics created from <em>manual correspondences</em> (left) and 
+    <em>automatically detected features with RANSAC</em> (right).
+  </p>
+
+  <!-- First Row -->
   <div class="row">
     <div class="img-block">
-      <img src="tower-mosaic_pyramid.jpg" alt="Tower mosaic (manually)">
-      <p class="img-title">Tower — manually</p>
-      <span class="label">tower-mosaic_pyramid.jpg</span>
+      <img src="tower-mosaic_pyramid.jpg" alt="Tower mosaic (manual)" width="400">
+      <p>Manual (Tower)</p>
     </div>
-
     <div class="img-block">
-      <img src="mosaic_auto.jpg" alt="Tower mosaic (automatically)">
-      <p class="img-title">Tower — automatically</p>
-      <span class="label">mosaic_auto.jpg</span>
+      <img src="mosaic_auto.jpg" alt="Tower mosaic (auto RANSAC)" width="400">
+      <p>Automatic with RANSAC (Tower)</p>
     </div>
   </div>
 
-  <!-- Row 2: library (manual / automatic) -->
+  <!-- Second Row -->
   <div class="row">
     <div class="img-block">
-      <img src="library-mosaic_pyramid.jpg" alt="Library mosaic (manually)">
-      <p class="img-title">Library — manually</p>
-      <span class="label">library-mosaic_pyramid.jpg</span>
+      <img src="library-mosaic_pyramid.jpg" alt="Library mosaic (manual)" width="400">
+      <p>Manual (Library)</p>
     </div>
-
     <div class="img-block">
-      <img src="library_3img.jpg" alt="Library mosaic (automatically)">
-      <p class="img-title">Library — automatically</p>
-      <span class="label">library_3img.jpg</span>
+      <img src="library_3img.jpg" alt="Library mosaic (auto RANSAC)" width="400">
+      <p>Automatic with RANSAC (Library)</p>
     </div>
   </div>
 
-  <!-- Row 3: street (manual / automatic) -->
+  <!-- Third Row -->
   <div class="row">
     <div class="img-block">
-      <img src="street-mosaic_pyramid.jpg" alt="Street mosaic (manually)">
-      <p class="img-title">Street — manually</p>
-      <span class="label">street-mosaic_pyramid.jpg</span>
+      <img src="street-mosaic_pyramid.jpg" alt="Street mosaic (manual)" width="400">
+      <p>Manual (Street)</p>
     </div>
-
     <div class="img-block">
-      <img src="street_3img.jpg" alt="Street mosaic (automatically)">
-      <p class="img-title">Street — automatically</p>
-      <span class="label">street_3img.jpg</span>
+      <img src="street_3img.jpg" alt="Street mosaic (auto RANSAC)" width="400">
+      <p>Automatic with RANSAC (Street)</p>
     </div>
   </div>
 </div>
+
 
     
   </div>
